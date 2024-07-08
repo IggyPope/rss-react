@@ -28,7 +28,7 @@ export class App extends React.Component<object, State> {
     this.setState((prevState) => ({ ...prevState, showLoader: true }));
 
     const response = await fetch(
-      `https://swapi.dev/api/people/${searchTerm && `?search=${searchTerm}`}`,
+      `https://swapi.dev/api/people/${searchTerm ? `?search=${searchTerm}` : ''}`,
     );
 
     const data = (await response.json()) as CharacterBaseResponse;
