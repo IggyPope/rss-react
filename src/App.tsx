@@ -1,36 +1,55 @@
-import { useState } from 'react';
+import React from 'react';
 
-import './App.css';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import { TopSection } from '@/components/TopSection';
 
-function App() {
-  const [count, setCount] = useState(0);
+import { MainSection } from './components/MainSection';
+import { LOCAL_STORAGE_KEY } from './constants/app';
+import { CharacterBase, CharacterBaseResponse } from './types/api';
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  );
+interface State {
+  searchTerm: string | null;
+  characters: CharacterBase[];
 }
 
-export default App;
+export class App extends React.Component<object, State> {
+  constructor(props: object) {
+    super(props);
+    const searchTerm = localStorage.getItem(LOCAL_STORAGE_KEY);
+    this.state = { searchTerm: searchTerm, characters: [] };
+  }
+
+  componentDidMount = () => {
+    void this.fetchCharacters(this.state.searchTerm);
+  };
+
+  fetchCharacters = async (searchTerm?: string | null) => {
+    const response = await fetch(
+      `https://swapi.dev/api/people/${searchTerm && `?search=${searchTerm}`}`,
+    );
+
+    const data = (await response.json()) as CharacterBaseResponse;
+
+    const characters = data.results;
+
+    this.setState((prevState) => ({
+      ...prevState,
+      characters: characters,
+    }));
+  };
+
+  render() {
+    return (
+      <>
+        <TopSection
+          inputValue={this.state.searchTerm || ''}
+          updateSearchTerm={(term: string) => {
+            localStorage.setItem(LOCAL_STORAGE_KEY, term);
+            this.setState((prevState) => ({ ...prevState, searchTerm: term }));
+            void this.fetchCharacters(term);
+          }}
+        />
+        <MainSection characters={this.state.characters} />
+      </>
+    );
+  }
+}
