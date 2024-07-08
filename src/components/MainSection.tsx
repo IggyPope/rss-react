@@ -6,6 +6,7 @@ import styles from './MainSection.module.scss';
 
 interface Props {
   characters: CharacterBase[];
+  showLoader: boolean;
 }
 
 export class MainSection extends React.Component<Props, object> {
@@ -13,17 +14,19 @@ export class MainSection extends React.Component<Props, object> {
     super(props);
   }
   render() {
-    if (this.props.characters.length === 0) {
-      return <div>No characters found</div>;
-    }
-
     return (
       <main className={styles.main}>
-        {this.props.characters.map((character) => (
-          <div
-            key={character.name}
-          >{`${character.name} - birth year: ${character.birth_year}`}</div>
-        ))}
+        {this.props.showLoader ? (
+          <div>Loading...</div>
+        ) : this.props.characters.length ? (
+          this.props.characters.map((character) => (
+            <div
+              key={character.name}
+            >{`${character.name} - birth year: ${character.birth_year}`}</div>
+          ))
+        ) : (
+          <h1>No characters found</h1>
+        )}
       </main>
     );
   }

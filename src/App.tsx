@@ -10,13 +10,14 @@ import { CharacterBase, CharacterBaseResponse } from './types/api';
 interface State {
   searchTerm: string | null;
   characters: CharacterBase[];
+  showLoader: boolean;
 }
 
 export class App extends React.Component<object, State> {
   constructor(props: object) {
     super(props);
     const searchTerm = localStorage.getItem(LOCAL_STORAGE_KEY);
-    this.state = { searchTerm: searchTerm, characters: [] };
+    this.state = { searchTerm: searchTerm, characters: [], showLoader: false };
   }
 
   componentDidMount = () => {
@@ -24,6 +25,8 @@ export class App extends React.Component<object, State> {
   };
 
   fetchCharacters = async (searchTerm?: string | null) => {
+    this.setState((prevState) => ({ ...prevState, showLoader: true }));
+
     const response = await fetch(
       `https://swapi.dev/api/people/${searchTerm && `?search=${searchTerm}`}`,
     );
@@ -36,6 +39,8 @@ export class App extends React.Component<object, State> {
       ...prevState,
       characters: characters,
     }));
+
+    this.setState((prevState) => ({ ...prevState, showLoader: false }));
   };
 
   render() {
@@ -49,7 +54,10 @@ export class App extends React.Component<object, State> {
             void this.fetchCharacters(term);
           }}
         />
-        <MainSection characters={this.state.characters} />
+        <MainSection
+          characters={this.state.characters}
+          showLoader={this.state.showLoader}
+        />
       </ErrorBoundary>
     );
   }
