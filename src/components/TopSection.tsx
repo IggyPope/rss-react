@@ -4,6 +4,7 @@ import styles from './TopSection.module.scss';
 
 interface State {
   inputValue: string;
+  throwError: boolean;
 }
 
 interface Props {
@@ -17,6 +18,7 @@ export class TopSection extends React.Component<Props, State> {
 
     this.state = {
       inputValue: props.inputValue,
+      throwError: false,
     };
   }
 
@@ -24,6 +26,12 @@ export class TopSection extends React.Component<Props, State> {
     event.preventDefault();
     this.props.updateSearchTerm(this.state.inputValue);
   };
+
+  componentDidUpdate(): void {
+    if (this.state.throwError) {
+      throw new Error('Something went wrong');
+    }
+  }
 
   render() {
     return (
@@ -39,6 +47,12 @@ export class TopSection extends React.Component<Props, State> {
             }
           />
           <button type="submit">Search</button>
+          <button
+            type="button"
+            onClick={() => this.setState({ throwError: true })}
+          >
+            Error
+          </button>
         </form>
       </header>
     );
