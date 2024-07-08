@@ -2,7 +2,6 @@ import React from 'react';
 
 import { TopSection } from '@/components/TopSection';
 
-import { ErrorBoundary } from './components/ErrorBoundary';
 import { MainSection } from './components/MainSection';
 import { LOCAL_STORAGE_KEY } from './constants/app';
 import { CharacterBase, CharacterBaseResponse } from './types/api';
@@ -45,7 +44,7 @@ export class App extends React.Component<object, State> {
 
   render() {
     return (
-      <ErrorBoundary>
+      <>
         <TopSection
           inputValue={this.state.searchTerm || ''}
           updateSearchTerm={(term: string) => {
@@ -58,7 +57,7 @@ export class App extends React.Component<object, State> {
           characters={this.state.characters}
           showLoader={this.state.showLoader}
         />
-      </ErrorBoundary>
+      </>
     );
   }
 }
