@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { TopSection } from '@/components/TopSection';
-
-import { MainSection } from './components/MainSection';
-import { LOCAL_STORAGE_KEY } from './constants/app';
-import { CharacterBase, CharacterBaseResponse } from './types/api';
+import { MainSection } from '@/components/MainSection/MainSection';
+import { TopSection } from '@/components/TopSection/TopSection';
+import { LOCAL_STORAGE_KEY } from '@/constants/app';
+import { CharacterBase, CharacterBaseResponse } from '@/types/api';
 
 interface State {
   searchTerm: string | null;
