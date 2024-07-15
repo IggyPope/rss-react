@@ -4,9 +4,10 @@ export const Button = ({
   children,
   type = 'button',
   onClick,
+  ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
-    <button className={styles.button} type={type} onClick={onClick}>
+    <button {...props} className={styles.button} type={type} onClick={onClick}>
       {children}
     </button>
   );

@@ -1,47 +1,76 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-import { API_PEOPLE_URL, LOCAL_STORAGE_KEY } from '@/constants/app';
+import {
+  API_PEOPLE_URL,
+  ITEMS_PER_PAGE,
+  LOCAL_STORAGE_KEY,
+} from '@/constants/app';
 import { useSyncLocalStorage } from '@/hooks/useSyncLocalStorage';
-import { CharacterBase, CharacterBaseResponse } from '@/types/api';
+import { CharacterBaseResponse } from '@/types/api';
 
+import { CardList } from '../CardList/CardList';
+import { Pagination } from '../Pagination/Pagination';
 import styles from './MainSection.module.scss';
 
 export const MainSection = () => {
   const [searchQuery] = useSyncLocalStorage(LOCAL_STORAGE_KEY);
-
-  const [characters, setCharacters] = useState<CharacterBase[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
 
   useEffect(() => {
-    void fetchCharacters(searchQuery);
-  }, [searchQuery]);
+    setSearchParams({ page: String(page) });
+  }, [page, setSearchParams]);
 
-  const fetchCharacters = async (searchTerm?: string | null) => {
+  const [charactersData, setCharactersData] =
+    useState<CharacterBaseResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchCharacters = useCallback(async () => {
     setIsLoading(true);
 
-    const response = await fetch(
-      `${API_PEOPLE_URL}/${searchTerm ? `?search=${searchTerm}` : ''}`,
-    );
+    const params = new URLSearchParams();
+
+    if (searchQuery) {
+      params.append('search', searchQuery);
+    }
+
+    if (page) {
+      params.append('page', page.toString());
+    }
+
+    const response = await fetch(`${API_PEOPLE_URL}/?${params.toString()}`);
 
     const data = (await response.json()) as CharacterBaseResponse;
 
-    const characters = data.results;
-
-    setCharacters(characters);
+    setCharactersData(data);
     setIsLoading(false);
-  };
+  }, [searchQuery, page]);
+
+  useEffect(() => {
+    console.log('searchQuery', searchQuery);
+    void fetchCharacters();
+  }, [page, searchQuery, fetchCharacters]);
 
   return (
     <main className={styles.main}>
       {isLoading && <div>Loading...</div>}
-      {!isLoading && !characters.length && <h1>No characters found</h1>}
+      {!isLoading && !charactersData?.results?.length && (
+        <h1>No characters found</h1>
+      )}
+      {!isLoading && charactersData?.results?.length && (
+        <CardList characters={charactersData.results} />
+      )}
       {!isLoading &&
-        characters.length &&
-        characters.map((character) => (
-          <div
-            key={character.name}
-          >{`${character.name} - birth year: ${character.birth_year}`}</div>
-        ))}
+        charactersData?.results?.length &&
+        charactersData?.count > ITEMS_PER_PAGE && (
+          <Pagination
+            prev={!!charactersData?.previous?.length}
+            next={!!charactersData?.next?.length}
+            page={page}
+            setPage={setPage}
+          />
+        )}
     </main>
   );
 };
