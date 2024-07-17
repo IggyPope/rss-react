@@ -33,22 +33,19 @@ export const DetailedCard = () => {
       {isLoading && <div>Loading...</div>}
       {!isLoading && character && (
         <>
-          <Link
-            to={`/page/${pageNumber}/`}
-            className={styles['click-away']}
-          ></Link>
+          <Link to={`/page/${pageNumber}/`} className={styles.clickAway}></Link>
           <div className={styles.container}>
             <h2 className={styles.title}>{character.name}</h2>
             <div className={styles.info}>
-              <div className={styles['info-container']}>
-                <h4 className={styles['prop-name']}>Birth year:</h4>
-                <h4 className={styles['prop-name']}>Gender:</h4>
-                <h4 className={styles['prop-name']}>Height:</h4>
-                <h4 className={styles['prop-name']}>Mass:</h4>
-                <h4 className={styles['prop-name']}>Gender:</h4>
-                <h4 className={styles['prop-name']}>Gender:</h4>
+              <div className={styles.infoContainer}>
+                <h4 className={styles.propCame}>Birth year:</h4>
+                <h4 className={styles.propCame}>Gender:</h4>
+                <h4 className={styles.propCame}>Height:</h4>
+                <h4 className={styles.propCame}>Mass:</h4>
+                <h4 className={styles.propCame}>Gender:</h4>
+                <h4 className={styles.propCame}>Gender:</h4>
               </div>
-              <div className={styles['info-container']}>
+              <div className={styles.infoContainer}>
                 <span>{character.birth_year}</span>
                 <span>{character.gender}</span>
                 <span>{character.height}</span>

@@ -13,7 +13,7 @@
   border-radius: 8px;
 }
 
-.click-away {
+.clickAway {
   position: absolute;
   z-index: 1;
   inset: 0;
@@ -29,13 +29,13 @@
   gap: 1rem;
 }
 
-.info-container {
+.infoContainer {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.prop-name {
+.propName {
   color: #f5ceb7;
 }
 
