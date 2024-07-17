@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 
 import {
   API_PEOPLE_URL,
@@ -15,62 +15,64 @@ import styles from './MainSection.module.scss';
 
 export const MainSection = () => {
   const [searchQuery] = useSyncLocalStorage(LOCAL_STORAGE_KEY);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
 
-  useEffect(() => {
-    setSearchParams({ page: String(page) });
-  }, [page, setSearchParams]);
+  const params = useParams();
 
   const [charactersData, setCharactersData] =
     useState<CharacterBaseResponse | null>(null);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchCharacters = useCallback(async () => {
     setIsLoading(true);
 
-    const params = new URLSearchParams();
+    const requestParams = new URLSearchParams();
 
     if (searchQuery) {
-      params.append('search', searchQuery);
+      requestParams.append('search', searchQuery);
     }
 
-    if (page) {
-      params.append('page', page.toString());
+    if (params.pageNumber) {
+      requestParams.append('page', params.pageNumber);
     }
 
-    const response = await fetch(`${API_PEOPLE_URL}/?${params.toString()}`);
+    const response = await fetch(
+      `${API_PEOPLE_URL}/?${requestParams.toString()}`,
+    );
 
     const data = (await response.json()) as CharacterBaseResponse;
 
     setCharactersData(data);
+
     setIsLoading(false);
-  }, [searchQuery, page]);
+  }, [searchQuery, params.pageNumber]);
 
   useEffect(() => {
-    console.log('searchQuery', searchQuery);
     void fetchCharacters();
-  }, [page, searchQuery, fetchCharacters]);
+  }, [searchQuery, fetchCharacters]);
 
   return (
     <main className={styles.main}>
-      {isLoading && <div>Loading...</div>}
-      {!isLoading && !charactersData?.results?.length && (
-        <h1>No characters found</h1>
-      )}
-      {!isLoading && charactersData?.results?.length && (
-        <CardList characters={charactersData.results} />
-      )}
-      {!isLoading &&
-        charactersData?.results?.length &&
-        charactersData?.count > ITEMS_PER_PAGE && (
-          <Pagination
-            prev={!!charactersData?.previous?.length}
-            next={!!charactersData?.next?.length}
-            page={page}
-            setPage={setPage}
-          />
+      <div className={styles.list}>
+        {isLoading && <div>Loading...</div>}
+        {!isLoading && !charactersData?.results?.length && (
+          <h1>No characters found</h1>
         )}
+        {!isLoading && charactersData?.results?.length && (
+          <div className={styles.content}>
+            <CardList characters={charactersData.results} />
+            <Outlet />
+          </div>
+        )}
+        {!isLoading &&
+          charactersData?.results?.length &&
+          charactersData?.count > ITEMS_PER_PAGE && (
+            <Pagination
+              disablePrev={charactersData?.previous === null}
+              disableNext={charactersData?.next === null}
+            />
+          )}
+      </div>
     </main>
   );
 };

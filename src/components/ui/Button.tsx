@@ -7,7 +7,12 @@ export const Button = ({
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
-    <button {...props} className={styles.button} type={type} onClick={onClick}>
+    <button
+      {...props}
+      className={[styles.button, props.className || ''].join(' ')}
+      type={type}
+      onClick={onClick}
+    >
       {children}
     </button>
   );

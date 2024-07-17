@@ -1,45 +1,38 @@
-import { useCallback, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '../ui/Button';
 import styles from './Pagination.module.scss';
 
 interface Props {
-  prev: boolean;
-  next: boolean;
-  page: number;
-  setPage: (page: number) => void;
+  disablePrev: boolean;
+  disableNext: boolean;
 }
 
-export const Pagination = ({ prev, next, page, setPage }: Props) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+export const Pagination = ({ disablePrev, disableNext }: Props) => {
+  const params = useParams();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!searchParams.get('page')) {
-      searchParams.set('page', '1');
-      setSearchParams(searchParams);
-
-      setPage(1);
-    } else {
-      const page = Number(searchParams.get('page'));
-      setPage(page);
-    }
-  }, [searchParams, setSearchParams, setPage]);
-
-  const changePage = useCallback(
-    (newPage: number) => {
-      setPage(newPage);
-    },
-    [setPage],
-  );
+  const changePage = (newPage: number) => {
+    navigate(`/page/${newPage}/`);
+  };
 
   return (
     <div className={styles.wrapper}>
-      <Button onClick={() => changePage(page - 1)} disabled={!prev}>
+      <Button
+        onClick={() =>
+          changePage(params.pageNumber ? Number(params.pageNumber) - 1 : 1)
+        }
+        disabled={disablePrev}
+      >
         Prev
       </Button>
-      <span>{page}</span>
-      <Button onClick={() => changePage(page + 1)} disabled={!next}>
+      <span>{params.pageNumber}</span>
+      <Button
+        onClick={() =>
+          changePage(params.pageNumber ? Number(params.pageNumber) + 1 : 1)
+        }
+        disabled={disableNext}
+      >
         Next
       </Button>
     </div>

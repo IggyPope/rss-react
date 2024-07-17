@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ErrorButton } from '@/components/ErrorButton/ErrorButton';
 import { Button } from '@/components/ui/Button';
@@ -10,10 +11,12 @@ import styles from './TopSection.module.scss';
 export const TopSection = () => {
   const [searchQuery, setSearchQuery] = useSyncLocalStorage(LOCAL_STORAGE_KEY);
   const [inputValueState, setInputValueState] = React.useState(searchQuery);
+  const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSearchQuery(inputValueState);
+    navigate(`/page/1/`);
   };
 
   useEffect(() => {
