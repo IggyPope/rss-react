@@ -1,0 +1,30 @@
+.button {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.6rem 1.2rem;
+
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1;
+  color: inherit;
+
+  background-color: #1a1a1a;
+  border: 1px solid transparent;
+  border-radius: 8px;
+
+  transition: border-color 0.25s;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.button:hover:not(:disabled) {
+  border-color: #646cff;
+}

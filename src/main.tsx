@@ -1,16 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
 
-import { App } from '@/App.tsx';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Fallback } from '@/components/Fallback';
+import { router } from '@/routes/Router';
 
 import './index.scss';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ErrorBoundary fallback={<Fallback />}>
-      <App />
-    </ErrorBoundary>
+    <RouterProvider router={router} />
   </React.StrictMode>,
 );

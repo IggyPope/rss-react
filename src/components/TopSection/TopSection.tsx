@@ -1,60 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { ErrorButton } from '@/components/ErrorButton/ErrorButton';
+import { Button } from '@/components/ui/Button';
+import { LOCAL_STORAGE_KEY } from '@/constants/app';
+import { useSyncLocalStorage } from '@/hooks/useSyncLocalStorage';
 
 import styles from './TopSection.module.scss';
 
-interface State {
-  inputValue: string;
-  throwError: boolean;
-}
+export const TopSection = () => {
+  const [searchQuery, setSearchQuery] = useSyncLocalStorage(LOCAL_STORAGE_KEY);
+  const [inputValueState, setInputValueState] = React.useState(searchQuery);
+  const navigate = useNavigate();
 
-interface Props {
-  inputValue: string;
-  updateSearchTerm(term: string): void;
-}
-
-export class TopSection extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {
-      inputValue: props.inputValue,
-      throwError: false,
-    };
-  }
-
-  handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    this.props.updateSearchTerm(this.state.inputValue);
+    setSearchQuery(inputValueState);
+    navigate(`/page/1/`);
   };
 
-  componentDidUpdate(): void {
-    if (this.state.throwError) {
-      throw new Error('Something went wrong');
-    }
-  }
+  useEffect(() => {
+    setInputValueState(searchQuery);
+  }, [searchQuery]);
 
-  render() {
-    return (
-      <header className={styles.header}>
-        <form className={styles.form} onSubmit={this.handleSubmit}>
-          <input
-            placeholder="Search by name"
-            className={styles.input}
-            type="text"
-            value={this.state.inputValue}
-            onChange={(event) =>
-              this.setState({ inputValue: event.target.value })
-            }
-          />
-          <button type="submit">Search</button>
-          <button
-            type="button"
-            onClick={() => this.setState({ throwError: true })}
-          >
-            Error
-          </button>
-        </form>
-      </header>
-    );
-  }
-}
+  return (
+    <header className={styles.header}>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <input
+          placeholder="Search by name"
+          className={styles.input}
+          type="text"
+          value={inputValueState || ''}
+          onChange={(event) => setInputValueState(event.target.value)}
+        />
+        <Button type="submit">Search</Button>
+        <ErrorButton />
+      </form>
+    </header>
+  );
+};
