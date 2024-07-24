@@ -17,3 +17,12 @@ export interface CharacterBaseResponse {
   previous: string | null;
   results: CharacterBase[];
 }
+
+export interface Character extends CharacterBase {
+  id: string;
+}
+
+export interface CharacterResponse
+  extends Omit<CharacterBaseResponse, 'results'> {
+  results: Character[];
+}

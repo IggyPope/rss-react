@@ -3,7 +3,7 @@ import { Fallback } from '@/components/Fallback/Fallback';
 import { MainSection } from '@/components/MainSection/MainSection';
 import { TopSection } from '@/components/TopSection/TopSection';
 
-export const App = () => {
+export const Root = () => {
   return (
     <ErrorBoundary fallback={<Fallback />}>
       <TopSection />
