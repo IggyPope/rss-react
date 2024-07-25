@@ -1,13 +1,23 @@
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Fallback } from '@/components/Fallback/Fallback';
+import { Header } from '@/components/Header/Header';
 import { MainSection } from '@/components/MainSection/MainSection';
-import { TopSection } from '@/components/TopSection/TopSection';
+import { useThemeContext } from '@/context/hooks';
+
+import styles from './Root.module.scss';
 
 export const Root = () => {
+  const { theme } = useThemeContext();
   return (
     <ErrorBoundary fallback={<Fallback />}>
-      <TopSection />
-      <MainSection />
+      <div
+        className={[styles.container, theme === 'light' ? styles.light : null]
+          .filter(Boolean)
+          .join(' ')}
+      >
+        <Header />
+        <MainSection />
+      </div>
     </ErrorBoundary>
   );
 };

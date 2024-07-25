@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/Button';
 import { LOCAL_STORAGE_KEY } from '@/constants/app';
 import { useSyncLocalStorage } from '@/hooks/useSyncLocalStorage';
 
-import styles from './TopSection.module.scss';
+import { ThemeSwitch } from '../ThemeSwitch/ThemeSwitch';
+import styles from './Header.module.scss';
 
-export const TopSection = () => {
+export const Header = () => {
   const [searchQuery, setSearchQuery] = useSyncLocalStorage(LOCAL_STORAGE_KEY);
   const [inputValue, setInputValue] = useState(searchQuery);
 
@@ -36,6 +37,7 @@ export const TopSection = () => {
         />
         <Button type="submit">Search</Button>
         <ErrorButton />
+        <ThemeSwitch />
       </form>
     </header>
   );

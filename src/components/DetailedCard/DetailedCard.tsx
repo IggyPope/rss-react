@@ -1,6 +1,7 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '@/components/ui/Button';
+import { useThemeContext } from '@/context/hooks';
 import { useGetCharacterByIdQuery } from '@/store/slices/charactersApiSlice';
 
 import styles from './DetailedCard.module.scss';
@@ -14,13 +15,22 @@ export const DetailedCard = () => {
 
   const navigate = useNavigate();
 
+  const { theme } = useThemeContext();
+
   return (
     <>
       {isFetching && <div>Loading...</div>}
       {!isFetching && character && (
         <>
           <Link to={`/page/${pageNumber}/`} className={styles.clickAway}></Link>
-          <div className={styles.container}>
+          <div
+            className={[
+              styles.container,
+              theme === 'light' ? styles.light : null,
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
             <h2 className={styles.title}>{character.name}</h2>
             <div className={styles.info}>
               <div className={styles.infoContainer}>
