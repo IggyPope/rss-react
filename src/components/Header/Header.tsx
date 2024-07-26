@@ -26,7 +26,7 @@ export const Header = () => {
   }, [searchQuery]);
 
   return (
-    <header className={styles.header}>
+    <header className={styles.header} data-testid="header">
       <form className={styles.form} onSubmit={handleSubmit}>
         <input
           placeholder="Search by name"

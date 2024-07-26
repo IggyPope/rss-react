@@ -44,6 +44,7 @@ export const Card = ({ character }: { character: Character }) => {
       <Link
         to={`character/${character.id}/`}
         className={styles.link}
+        data-testid={`character`}
       >{`${character.name} - birth year: ${character.birth_year}`}</Link>
     </div>
   );
