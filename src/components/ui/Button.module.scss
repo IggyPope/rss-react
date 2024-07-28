@@ -18,6 +18,12 @@
   border-radius: 8px;
 
   transition: border-color 0.25s;
+
+  &.light {
+    color: #1a1a1a;
+    background-color: #efe7e7;
+    border: 1px solid #1a1a1a;
+  }
 }
 
 .button:disabled {

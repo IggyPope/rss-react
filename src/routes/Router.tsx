@@ -1,13 +1,13 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
 
-import { App } from './App';
 import { Details } from './Details';
 import { NotFound } from './NotFound';
+import { Root } from './Root';
 
 export const router = createBrowserRouter([
   {
     path: '/page/:pageNumber',
-    element: <App />,
+    element: <Root />,
     children: [
       {
         path: 'character/:charId',
@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <App />,
+    element: <Root />,
     loader: () => redirect('/page/1/'),
   },
   {
