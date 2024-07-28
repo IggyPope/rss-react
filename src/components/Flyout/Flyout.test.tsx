@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { renderWithProviders } from '@/utils/test-utils';
+import { renderWithProviders } from '@/util/test-utils';
 
 import { Flyout } from './Flyout';
 

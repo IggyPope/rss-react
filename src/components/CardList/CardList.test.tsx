@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { renderWithProviders } from '@/utils/test-utils';
+import { renderWithProviders } from '@/util/test-utils';
 
 import { CardList } from './CardList';
 
@@ -94,7 +94,6 @@ const characters = [
 describe('Card', () => {
   it('should render 3 links', () => {
     renderWithProviders(<CardList characters={characters} />);
-    screen.debug();
     const links = screen.getAllByRole('link');
 
     expect(links).toHaveLength(3);

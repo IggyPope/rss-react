@@ -1,7 +1,7 @@
 import { cleanup } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll } from 'vitest';
 
-import { server } from './utils/msw/test-server';
+import { server } from './util/msw/test-server';
 
 beforeAll(() => {
   server.listen();
